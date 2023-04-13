@@ -47,4 +47,4 @@ if __name__ == "__main__":
             print(e, file=sys.stderr)
 
         action["frame"] = observation["frame"]
-        print(json.dumps(action, cls=dt.Vector2IntEncoder), flush=True)
+        print(json.dumps(action, cls=dt.MyJSONEncoder), flush=True)

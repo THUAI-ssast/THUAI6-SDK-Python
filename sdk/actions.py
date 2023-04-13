@@ -17,8 +17,8 @@ def ChangeBullet():
     return {"type": "ChangeBullet"}
 
 
-def PlaceBomb(position: Vector2Int):
-    return {"type": "PlaceBomb", "position": position}
+def PlaceBomb(target: Vector2Int):
+    return {"type": "PlaceBomb", "target": target}
 
 
 def AddLine(direction: Direction):
@@ -29,8 +29,8 @@ def RemoveLine(direction: Direction):
     return {"type": "RemoveLine", "direction": direction.value}
 
 
-def ActivatePortal(destination_position: Vector2Int):
-    return {"type": "ActivatePortal", "position": destination_position}
+def ActivatePortal(destination: Vector2Int):
+    return {"type": "ActivatePortal", "destination": destination}
 
 
 def Idle():

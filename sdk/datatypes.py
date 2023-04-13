@@ -1,8 +1,8 @@
-from enum import Enum
+from enum import Enum, IntFlag, IntEnum
 import json
 
 
-class Team(Enum):
+class Team(IntEnum):
     Red = 0
     Blue = 1
 
@@ -20,7 +20,7 @@ class LeftOrRight(Enum):
     Right = 1
 
 
-class LineInPortalPattern(Enum):
+class LineInPortalPattern(IntFlag):
     # sorted by stroke order of Chinese character `日`
     LeftUp = 1
     LeftDown = 2
@@ -31,7 +31,7 @@ class LineInPortalPattern(Enum):
     Down = 64
 
 
-class Direction(Enum):
+class Direction(IntFlag):
     Up = LineInPortalPattern.Center
     Down = LineInPortalPattern.Down
     Left = LineInPortalPattern.LeftDown
@@ -54,11 +54,13 @@ class Vector2Int:
         return Vector2Int(self.x - other.x, self.y - other.y)
 
 
-class Vector2IntEncoder(json.JSONEncoder):
+class MyJSONEncoder(json.JSONEncoder):
 
     def default(self, obj):
         if isinstance(obj, Vector2Int):
             return {"x": obj.x, "y": obj.y}
+        elif isinstance(obj, Enum):
+            return obj.value
         return super().default(obj)
 
 
