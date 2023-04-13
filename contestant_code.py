@@ -30,11 +30,21 @@ def get_action(observation: dict):
                   list[Portal]] = observation["portalsClassifiedByPattern"]
 
     my_player: Player = players[my_id]
+    my_state: PlayerState = my_player.state
+    my_cell = utils.to_cell(my_player.position)
     p = random.random()
     if p < 0.01:
-        return actions.PlaceBomb(utils.to_cell(
-            my_player.position)) if my_player.bomb_count > 0 else actions.Idle(
-            )
+        if my_player.bomb_count > 0 and my_state.can_place_bomb:
+            return actions.PlaceBomb(my_cell)
+        else:
+            return actions.Idle()
+    elif p < 0.02:
+        if not my_state.can_modify_portal:
+            return actions.Idle()
+        while True:
+            direction = random.choice(list(Direction))
+            if utils.can_modify_portal_line(my_cell, direction, map_info):
+                return actions.AddLine(direction)
     elif p < 0.05:
         return actions.Idle()
     elif p < 0.20:
