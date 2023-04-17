@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 import os
 
@@ -28,23 +29,27 @@ if __name__ == "__main__":
     sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
     from contestant_code import init, get_action
 
-    start_observation: dict = json.loads(input(),
-                                         object_hook=from_start_observation)
-    try:
-        init(start_observation)
-    except Exception as e:
-        print(e, file=sys.stderr)
+    logging.basicConfig(filename='ai.log', level=logging.DEBUG)
 
+    start_obs_str = input()
+    start_obs = json.loads(start_obs_str, object_hook=from_start_observation)
+    try:
+        init(start_obs)
+    except Exception as e:
+        logging.debug(start_obs_str)
+        logging.exception(e)
     while True:
-        observation: dict = json.loads(input(), object_hook=from_observation)
+        obs_str = input()
+        obs = json.loads(obs_str, object_hook=from_observation)
 
         try:
-            action = get_action(observation)
+            action = get_action(obs)
             if not isinstance(action, dict):
                 action = ac.Idle()
         except Exception as e:
             action = ac.Idle()
-            print(e, file=sys.stderr)
+            logging.debug(obs_str)
+            logging.exception(e)
 
-        action["frame"] = observation["frame"]
+        action["frame"] = obs["frame"]
         print(json.dumps(action, cls=dt.MyJSONEncoder), flush=True)
