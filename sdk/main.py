@@ -17,8 +17,8 @@ def from_observation(d: dict) -> dict:
     d["players"] = [dt.Player(p) for p in d["players"]]
     d["bombs"] = [dt.Bomb(b) for b in d["bombs"]]
     d["portalsClassifiedByPattern"] = {
-        pattern: [dt.Portal(p) for p in p_list]
-        for pattern, p_list in d["portalsClassifiedByPattern"].items()
+        dt.PortalPattern(pattern_str): [dt.Portal(p) for p in p_list]
+        for pattern_str, p_list in d["portalsClassifiedByPattern"].items()
     }
     return d
 
