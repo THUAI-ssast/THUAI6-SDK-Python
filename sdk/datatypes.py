@@ -53,6 +53,14 @@ class Vector2Int:
     def __sub__(self, other):
         return Vector2Int(self.x - other.x, self.y - other.y)
 
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __eq__(self, other):
+        if isinstance(other, Vector2Int):
+            return self.x == other.x and self.y == other.y
+        return NotImplemented
+
 
 class MyJSONEncoder(json.JSONEncoder):
 
