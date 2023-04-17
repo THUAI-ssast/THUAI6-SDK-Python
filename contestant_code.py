@@ -1,3 +1,5 @@
+from collections import defaultdict
+import logging
 import random
 
 import sdk.actions as actions
@@ -26,8 +28,17 @@ def get_action(observation: dict):
     '''
     players: list[Player] = observation["players"]
     bombs: list[Bomb] = observation["bombs"]
-    portals: dict[PortalPattern,
-                  list[Portal]] = observation["portalsClassifiedByPattern"]
+    portals_by_pattern: dict[
+        PortalPattern,
+        list[Portal]] = observation["portalsClassifiedByPattern"]
+
+    bombs_map = defaultdict(list)
+    for bomb in bombs:
+        bombs_map[bomb.position].append(bomb)
+    portals_map = {
+        portal.position: portal
+        for portals in portals_by_pattern.values() for portal in portals
+    }
 
     my_player: Player = players[my_id]
     my_state: PlayerState = my_player.state
@@ -36,23 +47,25 @@ def get_action(observation: dict):
     if p < 0.01:
         if my_player.bomb_count > 0 and my_state.can_place_bomb:
             return actions.PlaceBomb(my_cell)
-        else:
-            return actions.Idle()
     elif p < 0.02:
-        if not my_state.can_modify_portal:
-            return actions.Idle()
-        while True:
-            direction = random.choice(list(Direction))
-            if utils.can_modify_portal_line(my_cell, direction, map_info):
-                return actions.AddLine(direction)
-    elif p < 0.05:
+        if my_state.can_activate_portal:
+            if my_portal := portals_map.get(my_cell):
+                dest_portal = random.choice(
+                    portals_by_pattern[my_portal.pattern])
+                return actions.ActivatePortal(dest_portal.position)
+        if my_state.can_modify_portal:
+            while True:
+                direction = random.choice(list(Direction))
+                if utils.can_modify_portal_line(my_cell, direction, map_info):
+                    return actions.AddLine(direction)
         return actions.Idle()
     elif p < 0.20:
         return actions.Rotate(LeftOrRight.Left)
     elif p < 0.25:
-        return actions.Rotate(LeftOrRight.Right)
-    elif p < 0.60:
+        return actions.Move(ForwardOrBackWard.Backward)
+    elif p < 0.50:
         return actions.Shoot() if my_player.ammo > 0 else actions.ChangeBullet(
         )
     else:
         return actions.Move(ForwardOrBackWard.Forward)
+    return actions.Idle()
