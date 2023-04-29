@@ -1,4 +1,4 @@
-from datatypes import ForwardOrBackWard, LeftOrRight, Vector2Int, Direction
+from .datatypes import ForwardOrBackWard, LeftOrRight, Vector2Int, Direction
 
 
 def Move(direction: ForwardOrBackWard):

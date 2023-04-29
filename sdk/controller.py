@@ -3,8 +3,8 @@ import logging
 import sys
 import os
 
-import actions as ac
-import datatypes as dt
+from . import actions as ac
+from . import datatypes as dt
 
 
 def from_start_observation(d: dict) -> dict:

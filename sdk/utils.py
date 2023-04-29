@@ -1,6 +1,6 @@
 import math
 
-from datatypes import Vector2, Vector2Int, Direction
+from .datatypes import Vector2, Vector2Int, Direction
 
 
 def to_cell_center(pos: Vector2Int):
