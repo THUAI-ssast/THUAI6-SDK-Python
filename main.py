@@ -3,6 +3,7 @@ import logging
 import random
 
 import sdk.actions as actions
+from sdk.controller import run_ai
 from sdk.datatypes import *
 import sdk.utils as utils
 
@@ -69,3 +70,7 @@ def get_action(observation: dict):
     else:
         return actions.Move(ForwardOrBackWard.Forward)
     return actions.Idle()
+
+
+# Don't change this.
+run_ai(init, get_action)
