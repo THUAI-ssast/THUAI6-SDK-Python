@@ -1,4 +1,5 @@
 import math
+from typing import List
 
 from .datatypes import Vector2, Vector2Int, Direction
 
@@ -37,19 +38,19 @@ def is_in_portal(position: Vector2, portal_position: Vector2Int):
                                         and position.y < portal_position.y + 2)
 
 
-def is_in_map(cell_position: Vector2Int, map_info: list[list[int]]):
+def is_in_map(cell_position: Vector2Int, map_info: List[List[int]]):
     return (cell_position.x >= 0 and cell_position.x < len(map_info)) and (
         cell_position.y >= 0 and cell_position.y < len(map_info[0]))
 
 
-def is_road(cell_position: Vector2Int, map_info: list[list[int]]):
+def is_road(cell_position: Vector2Int, map_info: List[List[int]]):
     return is_in_map(
         cell_position,
         map_info) and map_info[cell_position.x][cell_position.y] == 0
 
 
 def can_modify_portal_line(cell_position: Vector2Int, direction: Direction,
-                           map_info: list[list[int]]):
+                           map_info: List[List[int]]):
     if not is_road(cell_position, map_info):
         return False
     if direction == Direction.Up:
