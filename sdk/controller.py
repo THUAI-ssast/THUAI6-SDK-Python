@@ -3,8 +3,8 @@ import logging
 import sys
 import os
 
-import actions as ac
-import datatypes as dt
+from . import actions as ac
+from . import datatypes as dt
 
 
 def from_start_observation(d: dict) -> dict:
@@ -24,11 +24,7 @@ def from_observation(d: dict) -> dict:
     return d
 
 
-if __name__ == "__main__":
-    # Import contestant code
-    sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
-    from contestant_code import init, get_action
-
+def run_ai(init: callable, get_action: callable):
     logging.basicConfig(filename='ai.log', level=logging.DEBUG)
 
     start_obs_str = input()

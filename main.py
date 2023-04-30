@@ -1,8 +1,10 @@
 from collections import defaultdict
 import logging
 import random
+from typing import List, Dict
 
 import sdk.actions as actions
+from sdk.controller import run_ai
 from sdk.datatypes import *
 import sdk.utils as utils
 
@@ -26,11 +28,11 @@ def get_action(observation: dict):
     '''
     Called every frame.
     '''
-    players: list[Player] = observation["players"]
-    bombs: list[Bomb] = observation["bombs"]
-    portals_by_pattern: dict[
+    players: List[Player] = observation["players"]
+    bombs: List[Bomb] = observation["bombs"]
+    portals_by_pattern: Dict[
         PortalPattern,
-        list[Portal]] = observation["portalsClassifiedByPattern"]
+        List[Portal]] = observation["portalsClassifiedByPattern"]
 
     bombs_map = defaultdict(list)
     for bomb in bombs:
@@ -69,3 +71,7 @@ def get_action(observation: dict):
     else:
         return actions.Move(ForwardOrBackWard.Forward)
     return actions.Idle()
+
+
+# Don't change this.
+run_ai(init, get_action)
