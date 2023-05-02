@@ -110,7 +110,7 @@ class Player():
     # to be decided. may be changed in the future
     # unit: meter, second, degree
     MAX_VELOCITY = 4.0
-    ROTATION_SPEED = 600.0
+    ROTATION_SPEED = 150.0
 
     MAX_HP = 100
     MAX_AMMO = 30
